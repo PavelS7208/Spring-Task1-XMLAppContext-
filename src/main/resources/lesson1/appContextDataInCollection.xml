@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="storage"
+          class="ru.pavel.OTR_Training.spring.lesson1.storage.Storage"
+          abstract="true">
+    </bean>
+
+    <bean id="inMemoryStorage"
+          name="testStorage"
+          class="ru.pavel.OTR_Training.spring.lesson1.storage.InMemoryStorage" parent="storage"
+          init-method="init">
+        <property name="storageType" value="DataFromCollection"/>
+    </bean>
+
+    <bean id="productService" name="inMemoryProductService,productServiceForTest"
+          class="ru.pavel.OTR_Training.spring.lesson1.service.ProductService">
+        <constructor-arg ref="inMemoryStorage"/>
+    </bean>
+
+    <bean id="cartService"
+          class="ru.pavel.OTR_Training.spring.lesson1.service.CartService">
+        <constructor-arg type="ru.pavel.OTR_Training.spring.lesson1.service.UserService" ref="userServiceInMemory"/>
+    </bean>
+
+
+    <bean id="userServiceInMemory" name="inMemoryUserService,userServiceForTest"
+          class="ru.pavel.OTR_Training.spring.lesson1.service.UserService">
+        <constructor-arg ref="inMemoryStorage"/>
+    </bean>
+
+    <bean id="orderService" class="ru.pavel.OTR_Training.spring.lesson1.service.OrderService" scope="prototype"/>
+
+</beans>
+
